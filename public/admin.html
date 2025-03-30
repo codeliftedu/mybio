@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Narendra Narain Kashyap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 2rem;
+        }
+        .card {
+            margin-bottom: 1rem;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+        }
+        .edit-profile-pic {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--glass-background);
+            backdrop-filter: blur(10px);
+            border: var(--glass-border);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 3;
+            transition: all 0.3s ease;
+        }
+
+        .edit-profile-pic:hover {
+            transform: scale(1.1);
+            background: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">Narendra Narain Kashyap</a>
+            <div id="authButtons">
+                <button class="btn btn-outline-primary" onclick="showLoginForm()">Admin Login</button>
+            </div>
+            <div id="adminMenu" style="display: none;">
+                <button class="btn btn-outline-danger" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Login Form -->
+        <div id="loginForm">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Admin Login</h5>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" id="loginUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" style="display: none;">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Profile Settings</h5>
+                    <form onsubmit="handleProfileSubmit(event)">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="profileName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <input type="text" class="form-control" id="profileDescription" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Bio</label>
+                            <textarea class="form-control" id="profileBio" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="profileEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Social Links</label>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showTwitter">
+                                            <i class="fab fa-twitter"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileTwitter" placeholder="Twitter URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showInstagram">
+                                            <i class="fab fa-instagram"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileInstagram" placeholder="Instagram URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showLinkedin">
+                                            <i class="fab fa-linkedin"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileLinkedin" placeholder="LinkedIn URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showFacebook">
+                                            <i class="fab fa-facebook"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileFacebook" placeholder="Facebook URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showGithub">
+                                            <i class="fab fa-github"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileGithub" placeholder="GitHub URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showYoutube">
+                                            <i class="fab fa-youtube"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileYoutube" placeholder="YouTube URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showTiktok">
+                                            <i class="fab fa-tiktok"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileTiktok" placeholder="TikTok URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showSnapchat">
+                                            <i class="fab fa-snapchat"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileSnapchat" placeholder="Snapchat URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showPinterest">
+                                            <i class="fab fa-pinterest"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profilePinterest" placeholder="Pinterest URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showReddit">
+                                            <i class="fab fa-reddit"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileReddit" placeholder="Reddit URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showTwitch">
+                                            <i class="fab fa-twitch"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileTwitch" placeholder="Twitch URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showDiscord">
+                                            <i class="fab fa-discord"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileDiscord" placeholder="Discord URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showMedium">
+                                            <i class="fab fa-medium"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileMedium" placeholder="Medium URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showBehance">
+                                            <i class="fab fa-behance"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileBehance" placeholder="Behance URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showDribbble">
+                                            <i class="fab fa-dribbble"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileDribbble" placeholder="Dribbble URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showVimeo">
+                                            <i class="fab fa-vimeo"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileVimeo" placeholder="Vimeo URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showSoundcloud">
+                                            <i class="fab fa-soundcloud"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileSoundcloud" placeholder="SoundCloud URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showSpotify">
+                                            <i class="fab fa-spotify"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileSpotify" placeholder="Spotify URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showTelegram">
+                                            <i class="fab fa-telegram"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileTelegram" placeholder="Telegram URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showWhatsapp">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileWhatsapp" placeholder="WhatsApp URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showTumblr">
+                                            <i class="fab fa-tumblr"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileTumblr" placeholder="Tumblr URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showFlickr">
+                                            <i class="fab fa-flickr"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileFlickr" placeholder="Flickr URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showDeviantart">
+                                            <i class="fab fa-deviantart"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileDeviantart" placeholder="DeviantArt URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showStackoverflow">
+                                            <i class="fab fa-stack-overflow"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileStackoverflow" placeholder="Stack Overflow URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showCodepen">
+                                            <i class="fab fa-codepen"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileCodepen" placeholder="CodePen URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showProducthunt">
+                                            <i class="fab fa-product-hunt"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileProducthunt" placeholder="Product Hunt URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showAngellist">
+                                            <i class="fab fa-angellist"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileAngellist" placeholder="AngelList URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showSlack">
+                                            <i class="fab fa-slack"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileSlack" placeholder="Slack URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showQuora">
+                                            <i class="fab fa-quora"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileQuora" placeholder="Quora URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showYelp">
+                                            <i class="fab fa-yelp"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileYelp" placeholder="Yelp URL">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <input type="checkbox" class="form-check-input me-2" id="showMastodon">
+                                            <i class="fab fa-mastodon"></i>
+                                        </span>
+                                        <input type="url" class="form-control" id="profileMastodon" placeholder="Mastodon URL">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Social Media Links</label>
+                            <div class="row">
+                                <!-- ... existing social media inputs ... -->
+                            </div>
+                            <button type="button" class="btn btn-primary mt-3" onclick="handleSocialMediaSubmit()">Save Social Media Links</button>
+                        </div>
+                        <div class="profile-picture-container mb-4">
+                            <img id="adminProfileImage" src="/default-avatar.png" alt="Profile Picture" class="profile-image">
+                            <div class="profile-image-ring"></div>
+                            <button class="btn btn-icon edit-profile-pic" onclick="document.getElementById('profileImageInput').click()">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                            <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="handleProfileImageChange(event)">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Theme Settings</h5>
+                    <form onsubmit="handleThemeSubmit(event)">
+                        <div class="mb-3">
+                            <label class="form-label">Preset Themes</label>
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('light')">
+                                        Light
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('dark')">
+                                        Dark
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('blue')">
+                                        Blue
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('green')">
+                                        Green
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('purple')">
+                                        Purple
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('orange')">
+                                        Orange
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('pink')">
+                                        Pink
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('red')">
+                                        Red
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('minimal')">
+                                        Minimal
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('gradient')">
+                                        Gradient
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('neon')">
+                                        Neon
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100" onclick="applyPresetTheme('forest')">
+                                        Forest
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Custom Theme</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Primary Color</label>
+                                    <input type="color" class="form-control form-control-color" id="primaryColor" value="#0d6efd">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Background Color</label>
+                                    <input type="color" class="form-control form-control-color" id="backgroundColor" value="#f8f9fa">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Text Color</label>
+                                    <input type="color" class="form-control form-control-color" id="textColor" value="#212529">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Card Background</label>
+                                    <input type="color" class="form-control form-control-color" id="cardBackground" value="#ffffff">
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <label class="form-label">Card Shadow</label>
+                                <input type="range" class="form-range" id="cardShadow" min="0" max="20" value="4">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Theme</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Links</h5>
+                    <button class="btn btn-primary mb-3" onclick="showAddLinkForm()">
+                        <i class="fas fa-plus"></i> Add New Link
+                    </button>
+                    <div id="linksList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add/Edit Link Form -->
+        <div id="linkForm" style="display: none;">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" id="linkFormTitle">Add New Link</h5>
+                    <form onsubmit="handleLinkSubmit(event)">
+                        <div class="mb-3">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" id="linkTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">URL</label>
+                            <input type="url" class="form-control" id="linkUrl" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Icon URL (optional)</label>
+                            <input type="url" class="form-control" id="linkIcon">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideLinkForm()">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isAdmin = false;
+        let editingLinkId = null;
+
+        // Add this at the top of your script section
+        const ALL_PLATFORMS = [
+            'twitter', 'instagram', 'facebook', 'linkedin', 
+            'github', 'youtube', 'tiktok', 'snapchat', 
+            'pinterest', 'reddit', 'twitch', 'discord',
+            'medium', 'behance', 'dribbble', 'vimeo',
+            'soundcloud', 'spotify', 'telegram', 'whatsapp',
+            'tumblr', 'flickr', 'deviantart', 'stackoverflow',
+            'codepen', 'producthunt', 'angellist', 'slack',
+            'quora', 'yelp', 'mastodon'
+        ];
+
+        // Check authentication on page load
+        window.onload = async () => {
+            isAdmin = localStorage.getItem('isAdmin') === 'true';
+            if (isAdmin) {
+                showAdminDashboard();
+                await fetchProfile();
+                await loadProfileImage();
+            }
+        };
+
+        // Auth functions
+        function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    isAdmin = true;
+                    localStorage.setItem('isAdmin', 'true');
+                    showAdminDashboard();
+                } else {
+                    alert('Login failed');
+                }
+            } catch (error) {
+                alert('Error during login');
+            }
+        }
+
+        function logout() {
+            isAdmin = false;
+            localStorage.removeItem('isAdmin');
+            document.getElementById('authButtons').style.display = 'block';
+            document.getElementById('adminMenu').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            window.location.href = '/';
+        }
+
+        // Dashboard functions
+        function showAdminDashboard() {
+            document.getElementById('authButtons').style.display = 'none';
+            document.getElementById('adminMenu').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('linkForm').style.display = 'none';
+            fetchProfile();
+            fetchLinks();
+            fetchTheme();
+        }
+
+        async function fetchLinks() {
+            try {
+                const response = await fetch('/api/links');
+                if (response.ok) {
+                    const links = await response.json();
+                    displayAdminLinks(links);
+                }
+            } catch (error) {
+                console.error('Error fetching links:', error);
+            }
+        }
+
+        function displayAdminLinks(links) {
+            const linksList = document.getElementById('linksList');
+            linksList.innerHTML = links.map(link => `
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0">${link.title}</h6>
+                                <a href="${link.url}" target="_blank" class="text-decoration-none">${link.url}</a>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-2" onclick="editLink('${link.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteLink('${link.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Link management functions
+        function showAddLinkForm() {
+            editingLinkId = null;
+            document.getElementById('linkFormTitle').textContent = 'Add New Link';
+            document.getElementById('linkTitle').value = '';
+            document.getElementById('linkUrl').value = '';
+            document.getElementById('linkIcon').value = '';
+            document.getElementById('linkForm').style.display = 'block';
+        }
+
+        function hideLinkForm() {
+            document.getElementById('linkForm').style.display = 'none';
+        }
+
+        async function handleLinkSubmit(event) {
+            event.preventDefault();
+            const title = document.getElementById('linkTitle').value;
+            const url = document.getElementById('linkUrl').value;
+            const icon = document.getElementById('linkIcon').value;
+
+            try {
+                const response = await fetch(
+                    editingLinkId ? `/api/links/${editingLinkId}` : '/api/links',
+                    {
+                        method: editingLinkId ? 'PUT' : 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ title, url, icon })
+                    }
+                );
+
+                if (response.ok) {
+                    hideLinkForm();
+                    fetchLinks();
+                } else {
+                    alert('Failed to save link');
+                }
+            } catch (error) {
+                alert('Error saving link');
+            }
+        }
+
+        async function editLink(id) {
+            try {
+                const response = await fetch(`/api/links/${id}`);
+                if (response.ok) {
+                    const link = await response.json();
+                    editingLinkId = id;
+                    document.getElementById('linkFormTitle').textContent = 'Edit Link';
+                    document.getElementById('linkTitle').value = link.title;
+                    document.getElementById('linkUrl').value = link.url;
+                    document.getElementById('linkIcon').value = link.icon || '';
+                    document.getElementById('linkForm').style.display = 'block';
+                }
+            } catch (error) {
+                alert('Error fetching link details');
+            }
+        }
+
+        async function deleteLink(id) {
+            if (confirm('Are you sure you want to delete this link?')) {
+                try {
+                    const response = await fetch(`/api/links/${id}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        fetchLinks();
+                    } else {
+                        alert('Failed to delete link');
+                    }
+                } catch (error) {
+                    alert('Error deleting link');
+                }
+            }
+        }
+
+        // Profile functions
+        async function fetchProfile() {
+            try {
+                const response = await fetch('/api/profile');
+                if (response.ok) {
+                    const profile = await response.json();
+                    console.log('Loaded profile:', profile); // Debug log
+                    
+                    // Set basic profile fields
+                    document.getElementById('profileName').value = profile.name || '';
+                    document.getElementById('profileBio').value = profile.bio || '';
+                    document.getElementById('profileEmail').value = profile.email || '';
+                    
+                    // Set social media links
+                    const socialLinks = profile.socialLinks || {};
+                    const visibleSocialLinks = profile.visibleSocialLinks || {};
+                    
+                    console.log('Social links:', socialLinks); // Debug log
+                    console.log('Visible social links:', visibleSocialLinks); // Debug log
+                    
+                    // Set values and checkbox states for each platform
+                    ALL_PLATFORMS.forEach(platform => {
+                        const input = document.getElementById(`profile${platform.charAt(0).toUpperCase() + platform.slice(1)}`);
+                        const checkbox = document.getElementById(`show${platform.charAt(0).toUpperCase() + platform.slice(1)}`);
+                        
+                        if (input && checkbox) {
+                            input.value = socialLinks[platform] || '';
+                            checkbox.checked = visibleSocialLinks[platform] || false;
+                            console.log(`Set ${platform}:`, { 
+                                value: input.value, 
+                                checked: checkbox.checked 
+                            }); // Debug log
+                        } else {
+                            console.log(`Missing elements for platform ${platform}`); // Debug log
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        }
+
+        // Update handleProfileSubmit to use ALL_PLATFORMS
+        async function handleProfileSubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('profileName').value.trim();
+            const bio = document.getElementById('profileBio').value.trim();
+            const email = document.getElementById('profileEmail').value.trim();
+            
+            // Create socialLinks and visibleSocialLinks objects
+            const socialLinks = {};
+            const visibleSocialLinks = {};
+            
+            // Get values and visibility for each platform
+            ALL_PLATFORMS.forEach(platform => {
+                const input = document.getElementById(`profile${platform.charAt(0).toUpperCase() + platform.slice(1)}`);
+                const checkbox = document.getElementById(`show${platform.charAt(0).toUpperCase() + platform.slice(1)}`);
+                
+                if (input && checkbox) {
+                    const url = input.value.trim();
+                    console.log(`Platform ${platform}:`, { url, checked: checkbox.checked }); // Debug log
+                    if (url) {  // Only add if URL is not empty
+                        socialLinks[platform] = url;
+                        visibleSocialLinks[platform] = checkbox.checked;
+                    }
+                } else {
+                    console.log(`Missing elements for platform ${platform}`); // Debug log
+                }
+            });
+            
+            const profile = {
+                name,
+                bio,
+                email,
+                socialLinks,
+                visibleSocialLinks
+            };
+            
+            console.log('Saving profile:', profile); // Debug log
+            
+            try {
+                const response = await fetch('/api/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(profile)
+                });
+                
+                if (response.ok) {
+                    const savedData = await response.json();
+                    console.log('Saved profile data:', savedData); // Debug log
+                    alert('Profile updated successfully!');
+                    window.location.reload();
+                } else {
+                    const data = await response.json();
+                    alert(data.message || 'Error updating profile');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Error updating profile');
+            }
+        }
+
+        // Theme functions
+        const presetThemes = {
+            light: {
+                theme: 'light',
+                primaryColor: '#0d6efd',
+                backgroundColor: '#f8f9fa',
+                textColor: '#212529',
+                cardBackground: '#ffffff',
+                cardShadow: 4
+            },
+            dark: {
+                theme: 'dark',
+                primaryColor: '#0d6efd',
+                backgroundColor: '#212529',
+                textColor: '#f8f9fa',
+                cardBackground: '#343a40',
+                cardShadow: 4
+            },
+            blue: {
+                theme: 'blue',
+                primaryColor: '#0d6efd',
+                backgroundColor: '#e3f2fd',
+                textColor: '#1a237e',
+                cardBackground: '#ffffff',
+                cardShadow: 4
+            },
+            green: {
+                theme: 'green',
+                primaryColor: '#198754',
+                backgroundColor: '#e8f5e9',
+                textColor: '#1b5e20',
+                cardBackground: '#ffffff',
+                cardShadow: 4
+            },
+            purple: {
+                theme: 'purple',
+                primaryColor: '#6f42c1',
+                backgroundColor: '#f3e5f5',
+                textColor: '#4a148c',
+                cardBackground: '#ffffff',
+                cardShadow: 4
+            },
+            orange: {
+                theme: 'orange',
+                primaryColor: '#fd7e14',
+                backgroundColor: '#fff3e0',
+                textColor: '#e65100',
+                cardBackground: '#ffffff',
+                cardShadow: 4
+            },
+            pink: {
+                theme: 'pink',
+                primaryColor: '#d63384',
+                backgroundColor: '#fce4ec',
+                textColor: '#880e4f',
+                cardBackground: '#ffffff',
+                cardShadow: 4
+            },
+            red: {
+                theme: 'red',
+                primaryColor: '#dc3545',
+                backgroundColor: '#ffebee',
+                textColor: '#b71c1c',
+                cardBackground: '#ffffff',
+                cardShadow: 4
+            },
+            minimal: {
+                theme: 'minimal',
+                primaryColor: '#212529',
+                backgroundColor: '#ffffff',
+                textColor: '#212529',
+                cardBackground: '#ffffff',
+                cardShadow: 0
+            },
+            gradient: {
+                theme: 'gradient',
+                primaryColor: '#6f42c1',
+                backgroundColor: '#e3f2fd',
+                textColor: '#1a237e',
+                cardBackground: '#ffffff',
+                cardShadow: 8
+            },
+            neon: {
+                theme: 'neon',
+                primaryColor: '#00ff00',
+                backgroundColor: '#000000',
+                textColor: '#ffffff',
+                cardBackground: '#1a1a1a',
+                cardShadow: 0
+            },
+            forest: {
+                theme: 'forest',
+                primaryColor: '#2e7d32',
+                backgroundColor: '#f1f8e9',
+                textColor: '#1b5e20',
+                cardBackground: '#ffffff',
+                cardShadow: 6
+            }
+        };
+
+        async function handleThemeSubmit(event) {
+            event.preventDefault();
+            const theme = {
+                theme: 'custom', // Set as custom since we're using custom colors
+                primaryColor: document.getElementById('primaryColor').value,
+                backgroundColor: document.getElementById('backgroundColor').value,
+                textColor: document.getElementById('textColor').value,
+                cardBackground: document.getElementById('cardBackground').value,
+                cardShadow: parseInt(document.getElementById('cardShadow').value)
+            };
+
+            try {
+                const response = await fetch('/api/theme', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(theme)
+                });
+
+                if (response.ok) {
+                    applyTheme(theme);
+                    alert('Theme updated successfully');
+                } else {
+                    alert('Failed to update theme');
+                }
+            } catch (error) {
+                alert('Error updating theme');
+            }
+        }
+
+        function applyPresetTheme(themeName) {
+            const theme = presetThemes[themeName];
+            if (theme) {
+                document.getElementById('primaryColor').value = theme.primaryColor;
+                document.getElementById('backgroundColor').value = theme.backgroundColor;
+                document.getElementById('textColor').value = theme.textColor;
+                document.getElementById('cardBackground').value = theme.cardBackground;
+                document.getElementById('cardShadow').value = theme.cardShadow;
+                applyTheme(theme);
+                
+                // Save the preset theme
+                fetch('/api/theme', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(theme)
+                }).then(response => {
+                    if (!response.ok) {
+                        alert('Failed to save theme');
+                    }
+                }).catch(error => {
+                    alert('Error saving theme');
+                });
+            }
+        }
+
+        async function fetchTheme() {
+            try {
+                const response = await fetch('/api/theme');
+                if (response.ok) {
+                    const theme = await response.json();
+                    const presetTheme = presetThemes[theme.theme] || theme;
+                    document.getElementById('primaryColor').value = presetTheme.primaryColor;
+                    document.getElementById('backgroundColor').value = presetTheme.backgroundColor;
+                    document.getElementById('textColor').value = presetTheme.textColor;
+                    document.getElementById('cardBackground').value = presetTheme.cardBackground;
+                    document.getElementById('cardShadow').value = presetTheme.cardShadow;
+                    applyTheme(presetTheme);
+                }
+            } catch (error) {
+                console.error('Error fetching theme:', error);
+            }
+        }
+
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            root.style.setProperty('--primary-color', theme.primaryColor);
+            root.style.setProperty('--background-color', theme.backgroundColor);
+            root.style.setProperty('--text-color', theme.textColor);
+            root.style.setProperty('--card-background', theme.cardBackground);
+            root.style.setProperty('--card-shadow', `${theme.cardShadow}px`);
+
+            // Update Bootstrap button colors
+            const style = document.createElement('style');
+            style.textContent = `
+                .btn-primary {
+                    background-color: ${theme.primaryColor} !important;
+                    border-color: ${theme.primaryColor} !important;
+                }
+                .btn-primary:hover {
+                    background-color: ${adjustColor(theme.primaryColor, -10)} !important;
+                    border-color: ${adjustColor(theme.primaryColor, -10)} !important;
+                }
+                .btn-outline-primary {
+                    color: ${theme.primaryColor} !important;
+                    border-color: ${theme.primaryColor} !important;
+                }
+                .btn-outline-primary:hover {
+                    background-color: ${theme.primaryColor} !important;
+                    border-color: ${theme.primaryColor} !important;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        function adjustColor(color, amount) {
+            const hex = color.replace('#', '');
+            const r = Math.max(0, Math.min(255, parseInt(hex.substr(0, 2), 16) + amount));
+            const g = Math.max(0, Math.min(255, parseInt(hex.substr(2, 2), 16) + amount));
+            const b = Math.max(0, Math.min(255, parseInt(hex.substr(4, 2), 16) + amount));
+            return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+        }
+
+        async function handleProfileImageChange(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+            if (!validTypes.includes(file.type)) {
+                alert('Please select a valid image file (JPEG, PNG, or GIF)');
+                return;
+            }
+
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB');
+                return;
+            }
+
+            // Show loading state
+            const imageElement = document.getElementById('adminProfileImage');
+            const originalSrc = imageElement.src;
+            imageElement.style.opacity = '0.5';
+
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+
+                console.log('Uploading file:', file.name, 'Size:', file.size, 'Type:', file.type);
+
+                const response = await fetch('/api/profile/image', {
+                    method: 'POST',
+                    body: formData,
+                    // Don't set Content-Type header when using FormData
+                });
+
+                console.log('Upload response status:', response.status);
+
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json();
+                    console.log('Upload response data:', data);
+                    
+                    if (response.ok) {
+                        // Update image preview with a cache-busting parameter
+                        const cacheBuster = '?t=' + new Date().getTime();
+                        imageElement.src = data.imageUrl + cacheBuster;
+                        
+                        // Show success message
+                        alert('Profile image updated successfully!');
+                    } else {
+                        throw new Error(data.message || 'Failed to upload image');
+                    }
+                } else {
+                    // Not JSON, likely an HTML error page
+                    const text = await response.text();
+                    console.error('Non-JSON response:', text);
+                    throw new Error('Server returned an invalid response');
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                alert('Failed to upload image: ' + error.message);
+                // Restore original image
+                imageElement.src = originalSrc;
+            } finally {
+                // Reset loading state
+                imageElement.style.opacity = '1';
+            }
+        }
+
+        // Add this function to load the profile image
+        async function loadProfileImage() {
+            try {
+                const response = await fetch('/api/profile');
+                if (response.ok) {
+                    const profile = await response.json();
+                    if (profile.imageUrl) {
+                        document.getElementById('adminProfileImage').src = profile.imageUrl;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading profile image:', error);
+            }
+        }
+
+        // Call this function when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProfileImage();
+        });
+
+        // Update the handleLinkEdit function to properly send the updated link data
+        async function handleLinkEdit(event, id) {
+            event.preventDefault();
+            
+            const titleInput = document.getElementById(`editLinkTitle_${id}`);
+            const urlInput = document.getElementById(`editLinkUrl_${id}`);
+            const iconInput = document.getElementById(`editLinkIcon_${id}`);
+            
+            const title = titleInput.value.trim();
+            const url = urlInput.value.trim();
+            const icon = iconInput.value.trim();
+            
+            if (!title || !url) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/links/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title, url, icon })
+                });
+                
+                if (response.ok) {
+                    // Refresh the links list
+                    fetchLinks();
+                    // Close the edit form
+                    document.getElementById(`editLinkForm_${id}`).style.display = 'none';
+                    document.getElementById(`linkItem_${id}`).style.display = 'flex';
+                } else {
+                    const data = await response.json();
+                    alert(data.message || 'Error updating link');
+                }
+            } catch (error) {
+                console.error('Error updating link:', error);
+                alert('Error updating link');
+            }
+        }
+
+        // Add this function to handle social media links submission
+        async function handleSocialMediaSubmit() {
+            // Get all social media platforms
+            const platforms = [
+                'twitter', 'instagram', 'facebook', 'linkedin', 
+                'github', 'youtube', 'tiktok', 'snapchat', 
+                'pinterest', 'reddit', 'twitch', 'discord',
+                'medium', 'behance', 'dribbble', 'vimeo',
+                'soundcloud', 'spotify', 'telegram', 'whatsapp',
+                'tumblr', 'flickr', 'deviantart', 'stackoverflow',
+                'codepen', 'producthunt', 'angellist', 'slack',
+                'quora', 'yelp', 'mastodon'
+            ];
+            
+            // Create socialLinks and visibleSocialLinks objects
+            const socialLinks = {};
+            const visibleSocialLinks = {};
+            
+            // Get values and visibility for each platform
+            platforms.forEach(platform => {
+                const input = document.getElementById(`profile${platform.charAt(0).toUpperCase() + platform.slice(1)}`);
+                const checkbox = document.getElementById(`show${platform.charAt(0).toUpperCase() + platform.slice(1)}`);
+                
+                if (input && checkbox) {
+                    const url = input.value.trim();
+                    if (url) {  // Only add if URL is not empty
+                        socialLinks[platform] = url;
+                        visibleSocialLinks[platform] = checkbox.checked;
+                    }
+                }
+            });
+            
+            try {
+                // Get current profile first
+                const profileResponse = await fetch('/api/profile');
+                const currentProfile = await profileResponse.json();
+                
+                // Update only social media related fields
+                const updatedProfile = {
+                    ...currentProfile,
+                    socialLinks,
+                    visibleSocialLinks
+                };
+                
+                const response = await fetch('/api/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedProfile)
+                });
+                
+                if (response.ok) {
+                    alert('Social media links updated successfully!');
+                    // Refresh the page to show updates
+                    window.location.reload();
+                } else {
+                    const data = await response.json();
+                    alert(data.message || 'Error updating social media links');
+                }
+            } catch (error) {
+                console.error('Error updating social media links:', error);
+                alert('Error updating social media links');
+            }
+        }
+    </script>
+</body>
+</html> 

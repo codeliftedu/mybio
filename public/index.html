@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narendra Narain Kashyap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #1a1e26;
+            --text-color: #e2e8f0;
+            --accent-color: #3b82f6;
+            --button-bg: rgba(15, 23, 42, 0.7);
+            --button-border: rgba(59, 130, 246, 0.5);
+            --button-glow: rgba(59, 130, 246, 0.3);
+            --button-text: #ffffff;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
+            padding: 3px;
+            margin-bottom: 1rem;
+            background-color: var(--background-color);
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .profile-bio {
+            font-size: 1rem;
+            color: rgba(226, 232, 240, 0.8);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            max-width: 400px;
+            white-space: pre-line;
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .link-button {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1rem;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            text-decoration: none;
+            border-radius: 2rem;
+            border: 1px solid var(--button-border);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            font-weight: 500;
+            box-shadow: 0 0 10px var(--button-glow);
+        }
+
+        .link-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px var(--button-glow);
+            border-color: var(--accent-color);
+        }
+
+        .link-button i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            text-decoration: none;
+            border: 1px solid var(--button-border);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px var(--button-glow);
+        }
+
+        .social-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px var(--button-glow);
+            border-color: var(--accent-color);
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingIndicator" class="loading-overlay">
+        <div class="spinner"></div>
+        </div>
+
+    <div class="container">
+        <div class="profile-container">
+            <img id="profileImage" src="/default-avatar.png" alt="Profile" class="profile-image">
+            <h1 id="profileName" class="profile-name">Loading...</h1>
+            <p id="profileBio" class="profile-bio"></p>
+        </div>
+
+        <div class="social-links">
+            <a href="#" id="profileTwitter" class="social-link" style="display: none;">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+            <a href="#" id="profileInstagram" class="social-link" style="display: none;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+            <a href="#" id="profileFacebook" class="social-link" style="display: none;">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#" id="profileLinkedin" class="social-link" style="display: none;">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+            <a href="#" id="profileGithub" class="social-link" style="display: none;">
+                        <i class="fab fa-github"></i>
+                    </a>
+            <a href="#" id="profileYoutube" class="social-link" style="display: none;">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+            <a href="#" id="profileEmail" class="social-link" style="display: none;">
+                <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+
+        <h2 class="section-title">My Links</h2>
+        <div id="publicLinks" class="links-container">
+            <!-- Links will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Fetch and display profile
+        async function fetchProfile() {
+            try {
+                const response = await fetch('/api/profile');
+                if (response.ok) {
+                    const profile = await response.json();
+                    
+                    // Update profile information
+                    document.getElementById('profileName').textContent = profile.name || 'Your Name';
+                    
+                    // Set bio with proper new line handling
+                    const bioElement = document.getElementById('profileBio');
+                    bioElement.textContent = profile.bio || '';
+                    
+                    // Update profile image if available
+                    if (profile.imageUrl) {
+                        document.getElementById('profileImage').src = profile.imageUrl;
+                    }
+                    
+                    // Update all social media links
+                    const socialLinks = profile.socialLinks || {};
+                    const visibleSocialLinks = profile.visibleSocialLinks || {};
+                    
+                    // Handle each social media platform
+                    const platforms = [
+                        'twitter', 'instagram', 'facebook', 'linkedin', 
+                        'github', 'youtube', 'tiktok', 'snapchat', 
+                        'pinterest', 'reddit', 'twitch', 'discord',
+                        'medium', 'behance', 'dribbble', 'vimeo',
+                        'soundcloud', 'spotify', 'telegram', 'whatsapp',
+                        'tumblr', 'flickr', 'deviantart', 'stackoverflow',
+                        'codepen', 'producthunt', 'angellist', 'slack',
+                        'quora', 'yelp', 'mastodon'
+                    ];
+                    
+                    platforms.forEach(platform => {
+                        const link = document.getElementById(`profile${platform.charAt(0).toUpperCase() + platform.slice(1)}`);
+                        if (link) {
+                            if (socialLinks[platform] && visibleSocialLinks[platform]) {
+                                link.href = socialLinks[platform];
+                                link.style.display = 'flex';
+                            } else {
+                                link.style.display = 'none';
+                            }
+                        } else {
+                            console.warn(`Element for platform ${platform} not found`);
+                        }
+                    });
+                    
+                    // Update email link
+                    const emailLink = document.getElementById('profileEmail');
+                    if (profile.email) {
+                        emailLink.href = `mailto:${profile.email}`;
+                        emailLink.style.display = 'flex';
+                    } else {
+                        emailLink.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        }
+
+        // Fetch and display links
+        async function fetchLinks() {
+            try {
+                const response = await fetch('/api/links');
+                if (response.ok) {
+                    const links = await response.json();
+                    displayPublicLinks(links);
+                }
+            } catch (error) {
+                console.error('Error fetching links:', error);
+            }
+        }
+
+        function displayPublicLinks(links) {
+            const publicLinks = document.getElementById('publicLinks');
+            if (!Array.isArray(links) || links.length === 0) {
+                publicLinks.innerHTML = '<p class="text-center">No links added yet.</p>';
+                return;
+            }
+            publicLinks.innerHTML = links.map(link => {
+                // Determine icon based on URL
+                let icon = 'fas fa-link';
+                
+                if (link.url.includes('twitter.com')) icon = 'fab fa-twitter';
+                else if (link.url.includes('instagram.com')) icon = 'fab fa-instagram';
+                else if (link.url.includes('linkedin.com')) icon = 'fab fa-linkedin';
+                else if (link.url.includes('github.com')) icon = 'fab fa-github';
+                else if (link.url.includes('youtube.com')) icon = 'fab fa-youtube';
+                else if (link.url.includes('facebook.com')) icon = 'fab fa-facebook';
+                
+                return `
+                    <a href="${link.url}" target="_blank" class="link-button">
+                        <i class="${icon}"></i>
+                        <span>${link.title}</span>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // Theme functions
+        async function fetchTheme() {
+            try {
+                const response = await fetch('/api/theme');
+                if (response.ok) {
+                    const theme = await response.json();
+                    applyTheme(theme);
+                }
+            } catch (error) {
+                console.error('Error fetching theme:', error);
+            }
+        }
+
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            
+            // Set accent color from theme
+            const accentColor = theme.primaryColor || '#3b82f6';
+            root.style.setProperty('--accent-color', accentColor);
+            
+            // Set button glow and border based on accent color
+            root.style.setProperty('--button-border', `${accentColor}80`); // 50% opacity
+            root.style.setProperty('--button-glow', `${accentColor}4D`); // 30% opacity
+            
+            // Set background color (keeping it dark for this UI)
+            root.style.setProperty('--background-color', '#1a1e26');
+            
+            // Set text color (keeping it light for readability)
+            root.style.setProperty('--text-color', '#e2e8f0');
+        }
+
+        function hideLoading() {
+            const loader = document.getElementById('loadingIndicator');
+            loader.classList.add('hidden');
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+
+        // Update window.onload to ensure DOM is ready
+        document.addEventListener('DOMContentLoaded', async () => {
+            await Promise.all([
+                fetchProfile(),
+                fetchLinks(),
+                fetchTheme()
+            ]);
+            hideLoading();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,17 @@
+{
+  "name": "Narendra Narain Kashyap",
+  "description": "Sgdhyd",
+  "bio": "Photographer\nCotton University 🏛️\nDon't die 👻 before you are dead☠️.\nStay curious🧐 : Stay foolish 😜\n🌐 Still exploring the World of 0's and 1's",
+  "email": "codelift.edu@gmail.com",
+  "socialLinks": {
+    "twitter": "https://x.com/_nnkashyap",
+    "instagram": "https://instagram.com/_nnkashyap",
+    "github": "https://github.com/codeliftedu"
+  },
+  "visibleSocialLinks": {
+    "twitter": true,
+    "instagram": true,
+    "github": true
+  },
+  "imageUrl": "/uploads/profile-1743332362918-362831721.jpg"
+}
